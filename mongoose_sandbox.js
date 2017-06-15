@@ -23,6 +23,7 @@ db.once('open', () => {
     name: {type: String, default: "Angela"}
   });
 
+  // pre hook!
   AnimalSchema.pre("save", function(next) {
     if(this.mass >= 100) {
       this.size = 'big';
@@ -33,6 +34,11 @@ db.once('open', () => {
     }
     next();
   });
+
+  AnimalSchema.statics.findSmall = function(callback) {
+    // this == Animal
+    return this.find({size: "small"}, callback);
+  }
 
 
   var Animal = mongoose.model('Animal', AnimalSchema);
@@ -80,7 +86,7 @@ db.once('open', () => {
     if (err) console.error(err);
     Animal.create(animalData, (err, animals) => {
       if (err) console.error(err);
-      Animal.find({}, (err, animals) =>{
+      Animal.findSmall((err, animals) =>{
         animals.forEach( (animal) => {
           console.log(animal.name + ' the ' + animal.color + ' ' + animal.type + " is a " + animal.size + "-sized animal.");
         });

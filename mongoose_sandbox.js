@@ -35,9 +35,9 @@ db.once('open', () => {
     next();
   });
 
-  AnimalSchema.statics.findSmall = function(callback) {
+  AnimalSchema.statics.findSize = function(size, callback) {
     // this == Animal
-    return this.find({size: "small"}, callback);
+    return this.find({size: size}, callback);
   }
 
 
@@ -86,7 +86,7 @@ db.once('open', () => {
     if (err) console.error(err);
     Animal.create(animalData, (err, animals) => {
       if (err) console.error(err);
-      Animal.findSmall((err, animals) =>{
+      Animal.findSize("medium", (err, animals) =>{
         animals.forEach( (animal) => {
           console.log(animal.name + ' the ' + animal.color + ' ' + animal.type + " is a " + animal.size + "-sized animal.");
         });
